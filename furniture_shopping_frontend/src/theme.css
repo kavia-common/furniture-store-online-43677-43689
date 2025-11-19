@@ -1,11 +1,8 @@
-/* ============================================
-   Import variable Inter with weights 100–900
-   ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  /* Font family for all text: use Inter as primary sans */
-  --font-family-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+  /* Font family for all text: use Poppins as primary sans */
+  --font-family-sans: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
 
   /* Light theme (Ocean Professional variant) */
   --primary: #7C3AED;              /* Purple: primary accent */
@@ -27,7 +24,7 @@
 }
 
 [data-theme="dark"] {
-  --font-family-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+  --font-family-sans: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
   /* Dark mode: test contrast; purple and deep amber remain distinguishable and accessible */
   --primary: #A78BFA;              /* Light purple for contrast on dark bg */
   --secondary: #F59E0B;            /* Stay amber for contrast, avoids gold/yellow for contrast accessibility */
@@ -62,27 +59,23 @@ body {
 /* Typography for headings and text */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-sans);
-  font-weight: 700;
   margin: 0 0 .5em 0;
   color: var(--text);
   letter-spacing: -0.003em;
   line-height: 1.18;
 }
-
-h1 { font-size: 2.7rem; font-weight: 800; letter-spacing: -0.021em; }
+h1 { font-size: 2.7rem; font-weight: 800; letter-spacing: -0.021em; }  /* Poppins supports 800 */
 h2 { font-size: 2.05rem; font-weight: 700; letter-spacing: -0.017em;}
 h3 { font-size: 1.47rem; font-weight: 600; }
 h4 { font-size: 1.12rem; font-weight: 600;}
-h5, h6 { font-size: 1em; font-weight: 600; }
+h5, h6 { font-size: 1em; font-weight: 500; }
 
-/* Base text for paragraphs, forms, inputs, buttons */
 p, span, label, input, textarea, button, select, option {
   font-family: var(--font-family-sans) !important;
   font-variation-settings: 'wght' 400;
   letter-spacing: 0;
 }
 
-/* Inputs/buttons for form consistency */
 input, textarea, button, select {
   font-family: var(--font-family-sans) !important;
   font-size: 1rem;
