@@ -46,6 +46,20 @@ export default function ProductDetail() {
 
   // Handle new review (locally in state if using mock)
   function addReviewLocal(newReviewInput) {
+    // newReviewInput may be either:
+    // - {name, rating, comment, images: [{url, name}] (local)}
+    // - FormData if backend (API base set)
+    const apiBase = process.env.REACT_APP_API_BASE;
+    if (apiBase && newReviewInput instanceof FormData) {
+      // PREP: API stub for backend integration (NOT invoked here)
+      // Example: fetch(`${apiBase}/products/${id}/reviews`, { method: "POST", body: newReviewInput })
+      //     .then(r => r.json())
+      //     .then(...)
+      // Here just simulate local fallback for now.
+      // If API integration, this block needs enabling.
+      // For demo/local state, NO real network, just pass through below.
+      return;
+    }
     const newReview = {
       id:
         "r" +
