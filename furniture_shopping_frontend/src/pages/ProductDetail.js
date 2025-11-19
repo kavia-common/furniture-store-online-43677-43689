@@ -22,7 +22,15 @@ function getHighResUrl(img, size = 1200) {
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const { addToCart } = useCart();
+  const {
+    addToCart,
+    items,
+    incrementQty,
+    decrementQty,
+    removeFromCart,
+    updateQty,
+    getLineTotal
+  } = useCart();
 
   // Reviews state and fetch logic
   const [reviews, setReviews] = useState(null);
@@ -313,13 +321,101 @@ export default function ProductDetail() {
             <li><strong>Dimensions:</strong> {product.specs?.width} x {product.specs?.depth} x {product.specs?.height}</li>
             <li><strong>Color:</strong> {product.specs?.color}</li>
           </ul>
-          <button
-            className="ocean-btn"
-            aria-label={`Add ${product.name} to cart`}
-            onClick={() => addToCart(product, 1)}
-          >
-            Add to Cart
-          </button>
+          {/* Cart controls: stepper/qty/remove */}
+          {(() => {
+            const item = items.find(i => i.id === product.id);
+            if (!item) {
+              return (
+                <button
+                  className="ocean-btn"
+                  aria-label={`Add ${product.name} to cart`}
+                  style={{marginTop:'0.4em'}}
+                  onClick={() => addToCart(product, 1)}
+                >
+                  Add to Cart
+                </button>
+              );
+            }
+            return (
+              <div style={{
+                marginTop: '0.5em',
+                display: 'flex',
+                gap: '0.36em',
+                alignItems: 'center'
+              }}>
+                <button
+                  className="ocean-btn secondary"
+                  aria-label={`Decrease quantity of ${product.name}`}
+                  style={{
+                    fontSize: "1.22em",
+                    fontWeight: 700,
+                    padding: "0.20em 0.72em",
+                    borderRadius: 10
+                  }}
+                  tabIndex={0}
+                  onClick={() => decrementQty(product.id)}
+                  disabled={item.qty <= 1}
+                >–</button>
+                <input
+                  type="number"
+                  min={1}
+                  max={99}
+                  value={item.qty}
+                  aria-label={`Set quantity for ${product.name}`}
+                  style={{
+                    width: 38,
+                    textAlign: 'center',
+                    fontWeight: 700,
+                    border: '1.5px solid #dbeafe',
+                    borderRadius: 8,
+                    padding: '0.18em 0.13em',
+                    fontSize: "1.07em",
+                    background: "var(--surface)"
+                  }}
+                  onChange={e => {
+                    let v = Math.max(parseInt(e.target.value || 1, 10), 1);
+                    updateQty(product.id, v);
+                  }}
+                />
+                <button
+                  className="ocean-btn secondary"
+                  aria-label={`Increase quantity of ${product.name}`}
+                  style={{
+                    fontSize: "1.22em",
+                    fontWeight: 700,
+                    padding: "0.20em 0.72em",
+                    borderRadius: 10
+                  }}
+                  tabIndex={0}
+                  onClick={() => incrementQty(product.id)}
+                  disabled={item.qty >= 99}
+                >+</button>
+                <button
+                  className="ocean-btn"
+                  style={{
+                    marginLeft: '0.55em',
+                    fontSize: "0.98em",
+                    padding: "0.29em 0.9em",
+                    fontWeight: 700,
+                    background: "var(--error)",
+                    color: "#fff",
+                    borderRadius: 8
+                  }}
+                  aria-label={`Remove ${product.name} from cart`}
+                  tabIndex={0}
+                  onClick={() => removeFromCart(product.id)}
+                >Remove</button>
+                <span style={{
+                  marginLeft: '1.1em',
+                  fontWeight: 700,
+                  color: 'var(--primary)',
+                  fontSize: '1.12em'
+                }}>
+                  ${(product.price * item.qty).toFixed(2)}
+                </span>
+              </div>
+            );
+          })()}
         </div>
       </div>
       {/* Reviews anchor/link and section */}

@@ -2,16 +2,18 @@ import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import { useTheme } from '../context/ThemeContext';
+import { useCart } from '../context/CartContext';
 
 /**
  * PUBLIC_INTERFACE
  * Header component with global SearchBar for quick access from every page.
- * Integrates with URL for sharing.
+ * Integrates with URL for sharing, shows cart item badge and drawer button.
  */
 function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { getCount } = useCart();
 
   // Parse ?q=... from current location
   const params = new URLSearchParams(location.search);
@@ -46,6 +48,13 @@ function Header() {
     );
   }
 
+  function openDrawer() {
+    // Trigger cart drawer open
+    const event = new CustomEvent('toggleCartDrawer', { detail: { open: true } });
+    window.dispatchEvent(event);
+    window.location.hash = "#cart"; // attention anchor (for accessibility)
+  }
+
   // Only show SearchBar on desktop (else moved to ProductList), or keep in header always. Let's show always for accessibility.
   return (
     <header className="ocean-surface ocean-shadow ocean-rounded" style={{ margin: '1rem 0.5rem 1.3rem', position: 'relative' }}>
@@ -71,6 +80,42 @@ function Header() {
               Products
             </NavLink>
           </div>
+          {/* Cart icon with badge */}
+          <button
+            className="ocean-btn secondary"
+            title={`Cart (${getCount()} items)`}
+            aria-label={`View cart, ${getCount()} items`}
+            style={{
+              minWidth: 0,
+              marginLeft: "1.2em",
+              padding: "0.48em 1.04em 0.48em 1.15em",
+              fontWeight: 700,
+              display: "inline-flex",
+              alignItems: "center",
+              fontSize: "1.15em",
+              borderRadius: "2em",
+              gap: ".11em",
+              position: "relative"
+            }}
+            onClick={openDrawer}
+            tabIndex={0}
+          >
+            <span style={{ fontSize:"1.3em", marginRight: ".14em" }} aria-hidden="true">🛒</span>
+            {getCount() > 0 && (
+              <span className="ocean-badge" aria-label={`${getCount()} items in cart`} style={{
+                position: "absolute",
+                top: 7,
+                right: 3,
+                background: "var(--error)",
+                fontWeight: 700,
+                fontSize:'0.91em',
+                minWidth:24, 
+                borderRadius: "8px",
+              }}>
+                {getCount()}
+              </span>
+            )}
+          </button>
           {/* Theme toggle button for dark/light mode */}
           <button
             className="ocean-btn"

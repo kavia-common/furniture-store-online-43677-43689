@@ -3,7 +3,16 @@ import { useCart } from '../context/CartContext';
 
 function CartDrawer() {
   const [open, setOpen] = useState(false);
-  const { items, removeFromCart, updateQty, clearCart, getTotal } = useCart();
+  const {
+    items,
+    incrementQty,
+    decrementQty,
+    updateQty,
+    removeFromCart,
+    clearCart,
+    getSubtotal,
+    getTotal
+  } = useCart();
   const prevOpenRef = useRef(false);
 
   // Open drawer when a new item is added (but not on mount)
@@ -11,6 +20,16 @@ function CartDrawer() {
     if (!prevOpenRef.current && items.length > 0) setOpen(true);
     prevOpenRef.current = items.length > 0;
   }, [items.length]);
+
+  // Listen for custom toggleCartDrawer event for opening via FAB, header, etc.
+  useEffect(() => {
+    const handler = (e) => {
+      if (e && e.detail && typeof e.detail.open !== 'undefined') setOpen(!!e.detail.open);
+      else setOpen(v => !v);
+    };
+    window.addEventListener('toggleCartDrawer', handler);
+    return () => window.removeEventListener('toggleCartDrawer', handler);
+  }, []);
 
   // Close handler accessible via keyboard
   function handleKeyDown(e) {
@@ -31,6 +50,14 @@ function CartDrawer() {
     }
   }, [open]);
 
+  // Styling helpers
+  const qtyBtnStyle = {
+    fontSize: "1.22em",
+    fontWeight: 700,
+    padding: "0.18em 0.7em",
+    borderRadius: 9
+  };
+
   return (
     <>
       <aside
@@ -47,7 +74,8 @@ function CartDrawer() {
           transform: open ? 'translateX(0)' : 'translateX(110%)',
           transition: 'transform 0.35s cubic-bezier(.66,-0.18,.32,1.2)',
           padding: '2.1em 1.2em 2.5em',
-          overflowY: 'auto'
+          overflowY: 'auto',
+          background: 'var(--surface)'
         }}
         tabIndex={open ? 0 : -1}
         aria-hidden={!open}
@@ -64,27 +92,86 @@ function CartDrawer() {
         ) : (
           <div role="list" aria-labelledby="cart-title">
             {items.map(item => (
-              <div key={item.id} className="ocean-card ocean-rounded-md" style={{display:'flex',alignItems:'center',gap:'0.8em',marginBottom:'0.65em',boxShadow:'none',border:'1px solid #f5f5fa'}}>
+              <div key={item.id} className="ocean-card ocean-rounded-md" style={{
+                display:'flex',
+                alignItems:'center',
+                gap:'0.8em',
+                marginBottom:'0.65em',
+                boxShadow:'none',
+                border:'1px solid #f5f5fa',
+                background:'var(--surface)'
+              }}>
                 <img src={item.image} alt={item.name} style={{width:54,height:54,borderRadius:'12px',objectFit:'cover'}}/>
-                <div style={{flex:1}}>
-                  <div style={{fontWeight:700}}>{item.name}</div>
-                  <div style={{fontSize:'0.98em',color:'#2563EB'}}>${(item.price*item.qty).toFixed(2)} ({item.qty}x)</div>
-                  <div style={{display:'flex',alignItems:'center',gap:'0.2em'}}>
-                    <span>Qty:</span>
+                <div style={{flex:1, minWidth:0}}>
+                  <div style={{fontWeight:700, fontSize:"1.08em", color:'var(--text)', whiteSpace:'nowrap', textOverflow:'ellipsis', overflow:'hidden'}}>{item.name}</div>
+                  <div style={{fontSize:'0.98em',margin:'0.11em 0', color:'var(--secondary)'}}>${item.price.toFixed(2)} x {item.qty} <span style={{color:'#444',fontWeight:400}}>= ${(item.price * item.qty).toFixed(2)}</span></div>
+                  <div style={{display:'flex',alignItems:'center',gap:'0.21em',marginTop:"0.18em"}}>
+                    <span style={{marginRight: '0.23em'}}>Qty:</span>
+                    <button
+                      className="ocean-btn secondary"
+                      style={qtyBtnStyle}
+                      aria-label={`Decrease quantity of ${item.name}`}
+                      tabIndex={0}
+                      onClick={() => decrementQty(item.id)}
+                      disabled={item.qty <= 1}
+                    >–</button>
                     <input
                       min={1}
                       type="number"
                       value={item.qty}
                       aria-label={`Set quantity for ${item.name}`}
-                      style={{width:50, marginLeft:'0.2em',border:'1px solid #dbeafe',padding:'0.2em 0.3em',borderRadius:8}}
-                      onChange={e=>updateQty(item.id, parseInt(e.target.value,10))}
+                      style={{width:38, margin:'0 0.13em', border:'1.5px solid #dbeafe', padding:'0.13em 0.28em',borderRadius:8,textAlign:'center',fontWeight:700, fontSize:'1.02em'}}
+                      onChange={e=>updateQty(item.id, parseInt(e.target.value,10) || 1)}
                     />
+                    <button
+                      className="ocean-btn secondary"
+                      style={qtyBtnStyle}
+                      aria-label={`Increase quantity of ${item.name}`}
+                      tabIndex={0}
+                      onClick={() => incrementQty(item.id)}
+                      disabled={item.qty >= 99}
+                    >+</button>
+                    <button
+                      className="ocean-btn"
+                      style={{
+                        marginLeft: '0.44em',
+                        fontSize: "0.92em",
+                        padding: "0.18em 0.8em",
+                        fontWeight: 700,
+                        background: "var(--error)",
+                        color: "#fff",
+                        borderRadius: 8
+                      }}
+                      aria-label={`Remove ${item.name} from cart`}
+                      tabIndex={0}
+                      onClick={() => removeFromCart(item.id)}
+                    >Remove</button>
                   </div>
                 </div>
-                <button className="ocean-btn secondary" style={{padding: '0.15em 0.55em',fontSize:'1.4em',marginLeft:'0.3em'}} aria-label={`Remove ${item.name}`} onClick={()=>removeFromCart(item.id)}>–</button>
               </div>
             ))}
-            <div style={{fontWeight:700,marginTop:'1.1em'}}>Total: <span style={{color:'var(--primary)'}}>${getTotal().toFixed(2)}</span></div>
+            <div style={{
+              fontWeight: 700,
+              marginTop: '1.25em',
+              fontSize: '1.18em',
+              display: 'flex',
+              justifyContent: "space-between",
+              alignItems: 'center'
+            }}>
+              <span>Subtotal:</span>
+              <span style={{color:'var(--primary)'}}>${getSubtotal().toFixed(2)}</span>
+            </div>
+            <div style={{
+              fontWeight: 700,
+              marginTop: '0.47em',
+              fontSize: '1.13em',
+              display: 'flex',
+              justifyContent: "space-between",
+              alignItems: 'center'
+            }}>
+              <span>Total:</span>
+              <span style={{color:'var(--primary)'}}>${getTotal().toFixed(2)}</span>
+            </div>
             <button className="ocean-btn" style={{width:'100%',marginTop:'1.2em'}} aria-label="Checkout" onClick={()=>{alert('Checkout is a demo only!')}}>Checkout</button>
             <button className="ocean-btn secondary" style={{width:'100%',marginTop:'0.5em'}} onClick={clearCart}>Clear Cart</button>
           </div>
