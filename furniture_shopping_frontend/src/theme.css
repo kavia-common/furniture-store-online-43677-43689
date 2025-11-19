@@ -1,39 +1,39 @@
 :root {
-  /* Light theme (Ocean Professional) */
-  --primary: #2563EB;
-  --secondary: #F59E0B;
+  /* Light theme (Ocean Professional variant) */
+  --primary: #7C3AED;              /* Purple: primary accent */
+  --secondary: #F59E0B;            /* Amber: secondary */
   --success: #F59E0B;
   --error: #EF4444;
-  --gradient-start: #2563eb1a;
+  --gradient-start: #a78bfa30;     /* purple-300, light transparency */
   --gradient-end: #f9fafb;
   --background: #f9fafb;
   --surface: #ffffff;
   --text: #111827;
-  --shadow: 0 2px 8px 0 rgba(16,30,54,0.08);
+  --shadow: 0 2px 8px 0 rgba(124,58,237,0.08);    /* purple shadow */
   --radius-lg: 1.2rem;
   --radius-md: 0.75rem;
   --radius-sm: 0.5rem;
-  --button-hover: #1553c3;
+  --button-hover: #6D28D9;         /* Deeper purple on hover */
   --chip-bg: var(--primary);
   --chip-color: #fff;
 }
 
 [data-theme="dark"] {
-  /* Dark mode for Ocean Professional */
-  --primary: #62a0ff;
-  --secondary: #FFD265;
-  --success: #FFD265;
+  /* Dark mode: test contrast; purple and deep amber remain distinguishable and accessible */
+  --primary: #A78BFA;              /* Light purple for contrast on dark bg */
+  --secondary: #F59E0B;            /* Stay amber for contrast, avoids gold/yellow for contrast accessibility */
+  --success: #F59E0B;
   --error: #ff6c51;
-  --gradient-start: #232b39;
-  --gradient-end: #181c28;
+  --gradient-start: #32285a;
+  --gradient-end: #181624;
   --background: #151922;
-  --surface: #242a36;
-  --text: #f2f6fa;
-  --shadow: 0 2px 8px 0 rgba(17,24,39,0.48);
+  --surface: #24213A;
+  --text: #F3EFFD;
+  --shadow: 0 2px 8px 0 rgba(124,58,237,0.19);     /* more purple in dark mode */
   --radius-lg: 1.2rem;
   --radius-md: 0.75rem;
   --radius-sm: 0.5rem;
-  --button-hover: #305fae;
+  --button-hover: #B794F4;         /* Slightly lighter purple on hover (purple-300) */
   --chip-bg: var(--primary);
   --chip-color: #fff;
 }
@@ -98,31 +98,33 @@ body {
 }
 
 .ocean-btn:focus-visible {
-  outline: var(--secondary) 2px solid;
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--secondary);
 }
 
 .ocean-btn:hover {
   background: var(--button-hover);
-  color: #eaeaea;
+  color: #f6f3fd;
 }
 
 .ocean-btn.secondary {
   background: var(--secondary);
-  color: #202427;
+  color: #23182b;
 }
 
 [data-theme="dark"] .ocean-btn.secondary {
-  background: #FFD265;
-  color: #23292e;
+  background: var(--secondary);
+  color: #23182b;
 }
 
 .ocean-btn.secondary:hover {
-  background: #cf8508;
+  background: #c47c09;
   color: #fff;
 }
 [data-theme="dark"] .ocean-btn.secondary:hover {
-  background: #ebbe42;
-  color: #181c28;
+  background: #ffc04a;
+  color: #282044;
 }
 
 /* Chips/Badges */
@@ -135,6 +137,7 @@ body {
   padding: 0.15rem 0.8rem;
   margin-right: 0.5rem;
   transition: background 0.2s, color 0.2s;
+  box-shadow: 0 1px 3px #7c3aed22;
 }
 .ocean-badge {
   display: inline-block;
@@ -145,6 +148,7 @@ body {
   font-size: 0.85em;
   margin-left: 0.5em;
   vertical-align: middle;
+  box-shadow: 0 1px 3px #f59e0b22;
 }
 
 /* Card */
