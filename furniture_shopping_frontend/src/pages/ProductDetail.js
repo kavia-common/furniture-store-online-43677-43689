@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchProductById } from '../data/fetchProducts';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import ReviewSummary from '../components/ReviewSummary';
 import ReviewsList from '../components/ReviewsList';
 import ReviewForm from '../components/ReviewForm';
@@ -115,6 +116,8 @@ export default function ProductDetail() {
     return () => window.removeEventListener("keydown", onKey);
   }, [modal]);
 
+  const { isWishlisted, toggleWishlist } = useWishlist();
+
   if (!product) {
     return <div className="ocean-main-container"><div className="ocean-card ocean-skeleton" style={{height:350}} /></div>;
   }
@@ -129,6 +132,7 @@ export default function ProductDetail() {
   ];
 
   const currentImg = galleryImages[modal.imgIdx];
+  const wished = isWishlisted(product.id);
 
   return (
     <div className="ocean-main-container" style={{display:'flex', flexDirection:"column", alignItems:'center', paddingTop:'2rem', minHeight:'56vh'}}>
@@ -139,6 +143,48 @@ export default function ProductDetail() {
         flexDirection: 'column',
         gap: '2rem'
       }}>
+        {/* Top area: Wishlist button */}
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "flex-end", width: "100%" }}>
+          <button
+            aria-label={wished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+            title={wished ? "Remove from wishlist" : "Add to wishlist"}
+            className="ocean-btn secondary"
+            style={{
+              margin: "0.68em 0.53em 0 0",
+              background: wished ? "var(--primary)" : "var(--secondary)",
+              color: wished ? "#fff" : "#23182b",
+              borderRadius: "50%",
+              padding: "0.38em 0.45em",
+              minWidth: 0,
+              width: 39,
+              height: 39,
+              zIndex: 10,
+              boxShadow: "0 1px 10px #bdcafe31",
+              outline: wished ? "2px solid var(--primary)" : undefined,
+              border: 0,
+            }}
+            tabIndex={0}
+            onClick={e => {
+              e.stopPropagation(); toggleWishlist(product.id);
+            }}
+            onKeyDown={e => {
+              if (e.key === " " || e.key === "Enter") {
+                e.preventDefault(); e.stopPropagation(); toggleWishlist(product.id);
+              }
+            }}
+            aria-pressed={wished}
+          >
+            {/* Accessible heart SVG */}
+            <svg viewBox="0 0 26 26" width="23" height="23" fill="none" aria-hidden="true">
+              <path
+                d="M13 22c-.56-.41-5.7-4.23-8.18-7.19C2.13 12.63 1.5 10.95 1.5 9.29c0-3.41 2.6-5.79 5.29-5.79 1.84 0 3.6.99 4.49 2.5.89-1.51 2.65-2.5 4.49-2.5 2.69 0 5.29 2.38 5.29 5.79 0 1.66-.62 3.34-3.32 5.52C18.7 17.77 13.56 21.59 13 22Z"
+                stroke={wished ? "#fff" : "var(--primary)"}
+                strokeWidth="2"
+                fill={wished ? "var(--primary)" : "none"}
+              />
+            </svg>
+          </button>
+        </div>
         {/* HERO product image / gallery */}
         <div
           style={{

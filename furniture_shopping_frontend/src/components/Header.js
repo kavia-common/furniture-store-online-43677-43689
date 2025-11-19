@@ -1,8 +1,9 @@
 import React from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate, useHref } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import { useTheme } from '../context/ThemeContext';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 
 /**
  * PUBLIC_INTERFACE
@@ -55,6 +56,7 @@ function Header() {
     window.location.hash = "#cart"; // attention anchor (for accessibility)
   }
 
+  const { getWishlistCount } = useWishlist();
   // Only show SearchBar on desktop (else moved to ProductList), or keep in header always. Let's show always for accessibility.
   return (
     <header className="ocean-surface ocean-shadow ocean-rounded" style={{ margin: '1rem 0.5rem 1.3rem', position: 'relative' }}>
@@ -80,6 +82,51 @@ function Header() {
               Products
             </NavLink>
           </div>
+          {/* Wishlist icon with badge */}
+          <NavLink
+            to="/wishlist"
+            className="ocean-btn secondary"
+            title={`Wishlist (${getWishlistCount()} items)`}
+            aria-label={`View wishlist, ${getWishlistCount()} items`}
+            style={{
+              minWidth: 0,
+              marginLeft: "1.2em",
+              padding: "0.42em 0.6em 0.42em 0.8em",
+              fontWeight: 700,
+              display: "inline-flex",
+              alignItems: "center",
+              fontSize: "1.11em",
+              borderRadius: "2em",
+              gap: ".15em",
+              position: "relative"
+            }}
+            tabIndex={0}
+          >
+            <span style={{ fontSize: "1.28em", marginRight: ".14em", color: "var(--primary)" }} aria-hidden="true">
+              {/* SVG Heart Outline/Fill for wishlist */}
+              <svg viewBox="0 0 26 26" aria-hidden="true" width="23" height="23" fill="none" style={{verticalAlign: 'middle', marginRight: 2}}>
+                <path
+                  d="M13 22c-.56-.41-5.7-4.23-8.18-7.19C2.13 12.63 1.5 10.95 1.5 9.29c0-3.41 2.6-5.79 5.29-5.79 1.84 0 3.6.99 4.49 2.5.89-1.51 2.65-2.5 4.49-2.5 2.69 0 5.29 2.38 5.29 5.79 0 1.66-.62 3.34-3.32 5.52C18.7 17.77 13.56 21.59 13 22Z"
+                  stroke="var(--primary)" strokeWidth="2" fill={getWishlistCount() > 0 ? "var(--primary)" : "none"} />
+              </svg>
+            </span>
+            <span style={{fontWeight:700, fontSize:"1.03em"}}>Wishlist</span>
+            {getWishlistCount() > 0 && (
+              <span className="ocean-badge" aria-label={`${getWishlistCount()} items in wishlist`} style={{
+                position: "absolute",
+                top: 7,
+                right: 0,
+                background: "var(--primary)",
+                fontWeight: 700,
+                fontSize:'0.91em',
+                minWidth:24,
+                borderRadius: "8px",
+                left: "auto"
+              }}>
+                {getWishlistCount()}
+              </span>
+            )}
+          </NavLink>
           {/* Cart icon with badge */}
           <button
             className="ocean-btn secondary"

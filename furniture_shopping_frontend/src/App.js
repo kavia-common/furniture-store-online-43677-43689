@@ -10,7 +10,9 @@ import FloatingCartButton from './components/FloatingCartButton';
 import './App.css';
 import './theme.css';
 
+// Lazy-load for faster initial (just like others)
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const WishlistPage = lazy(() => import('./pages/WishlistPage'));
 
 function App() {
   // Main application wraps structure; context is provided at index.js
@@ -26,6 +28,14 @@ function App() {
             element={
               <Suspense fallback={<div className="ocean-main-container"><div className="ocean-skeleton" style={{height:180, borderRadius:18, margin:18}} /></div>}>
                 <ProductDetail />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/wishlist"
+            element={
+              <Suspense fallback={<div className="ocean-main-container"><div className="ocean-skeleton" style={{height:180, borderRadius:18, margin:18}} /></div>}>
+                <WishlistPage />
               </Suspense>
             }
           />

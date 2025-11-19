@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 
 // PUBLIC_INTERFACE
 function ProductCard({ product }) {
@@ -13,8 +14,17 @@ function ProductCard({ product }) {
     removeFromCart,
     updateQty
   } = useCart();
+
+  const {
+    isWishlisted,
+    toggleWishlist,
+  } = useWishlist();
+
   // Find if this product is in cart already
   const item = items.find(i => i.id === product.id);
+
+  // Wishlisted state
+  const wished = isWishlisted(product.id);
 
   return (
     <div className="ocean-card ocean-transition ocean-rounded-md" tabIndex={0}
@@ -23,10 +33,57 @@ function ProductCard({ product }) {
         cursor: 'pointer',
         display:'flex',
         flexDirection:'column',
+        position: 'relative'
       }}
       onClick={() => navigate(`/product/${product.id}`)}
       onKeyDown={e => e.key==='Enter' && navigate(`/product/${product.id}`)}
     >
+      {/* Wishlist Heart Button (top right, overlay) */}
+      <button
+        aria-label={wished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+        title={wished ? "Remove from wishlist" : "Add to wishlist"}
+        className="ocean-btn secondary"
+        style={{
+          position: "absolute",
+          top: 13,
+          right: 13,
+          background: wished ? "var(--primary)" : "var(--secondary)",
+          color: wished ? "#fff" : "#23182b",
+          borderRadius: "50%",
+          padding: "0.37em 0.42em",
+          minWidth: 0,
+          width: 36,
+          height: 36,
+          zIndex: 1,
+          boxShadow: "0 1px 10px #bdcafe31",
+          outline: wished ? "2px solid var(--primary)" : undefined,
+          border: 0,
+        }}
+        tabIndex={0}
+        onClick={e => {
+          e.stopPropagation();
+          toggleWishlist(product.id);
+        }}
+        onKeyDown={e => {
+          // Support space/enter for accessibility
+          if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleWishlist(product.id);
+          }
+        }}
+        aria-pressed={wished}
+      >
+        {/* Accessible heart SVG, visually filled when active */}
+        <svg viewBox="0 0 26 26" width="22" height="22" fill="none" aria-hidden="true">
+          <path
+            d="M13 22c-.56-.41-5.7-4.23-8.18-7.19C2.13 12.63 1.5 10.95 1.5 9.29c0-3.41 2.6-5.79 5.29-5.79 1.84 0 3.6.99 4.49 2.5.89-1.51 2.65-2.5 4.49-2.5 2.69 0 5.29 2.38 5.29 5.79 0 1.66-.62 3.34-3.32 5.52C18.7 17.77 13.56 21.59 13 22Z"
+            stroke={wished ? "#fff" : "var(--primary)"}
+            strokeWidth="2"
+            fill={wished ? "var(--primary)" : "none"}
+          />
+        </svg>
+      </button>
       <img
         src={product.image}
         srcSet={
