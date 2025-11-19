@@ -1,4 +1,5 @@
 :root {
+  /* Light theme (Ocean Professional) */
   --primary: #2563EB;
   --secondary: #F59E0B;
   --success: #F59E0B;
@@ -12,6 +13,36 @@
   --radius-lg: 1.2rem;
   --radius-md: 0.75rem;
   --radius-sm: 0.5rem;
+  --button-hover: #1553c3;
+  --chip-bg: var(--primary);
+  --chip-color: #fff;
+}
+
+[data-theme="dark"] {
+  /* Dark mode for Ocean Professional */
+  --primary: #62a0ff;
+  --secondary: #FFD265;
+  --success: #FFD265;
+  --error: #ff6c51;
+  --gradient-start: #232b39;
+  --gradient-end: #181c28;
+  --background: #151922;
+  --surface: #242a36;
+  --text: #f2f6fa;
+  --shadow: 0 2px 8px 0 rgba(17,24,39,0.48);
+  --radius-lg: 1.2rem;
+  --radius-md: 0.75rem;
+  --radius-sm: 0.5rem;
+  --button-hover: #305fae;
+  --chip-bg: var(--primary);
+  --chip-color: #fff;
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--text);
+  transition: background 0.4s cubic-bezier(.26,.85,.38,1), color 0.29s cubic-bezier(.36,1.2,.49,1);
 }
 
 /* Utility classes */
@@ -21,10 +52,12 @@
 
 .ocean-surface {
   background: var(--surface);
+  transition: background 0.4s cubic-bezier(.26,.85,.38,1), color 0.32s cubic-bezier(.36,1.2,.49,1);
 }
 
 .ocean-shadow {
   box-shadow: var(--shadow);
+  transition: box-shadow 0.22s;
 }
 
 .ocean-rounded {
@@ -61,7 +94,7 @@
   padding: 0.5rem 1.25rem;
   cursor: pointer;
   box-shadow: var(--shadow);
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
 }
 
 .ocean-btn:focus-visible {
@@ -69,7 +102,8 @@
 }
 
 .ocean-btn:hover {
-  background: #1553c3;
+  background: var(--button-hover);
+  color: #eaeaea;
 }
 
 .ocean-btn.secondary {
@@ -77,21 +111,31 @@
   color: #202427;
 }
 
+[data-theme="dark"] .ocean-btn.secondary {
+  background: #FFD265;
+  color: #23292e;
+}
+
 .ocean-btn.secondary:hover {
   background: #cf8508;
+  color: #fff;
+}
+[data-theme="dark"] .ocean-btn.secondary:hover {
+  background: #ebbe42;
+  color: #181c28;
 }
 
 /* Chips/Badges */
 .ocean-chip {
   display: inline-block;
   border-radius: var(--radius-sm);
-  background: var(--primary);
-  color: #fff;
+  background: var(--chip-bg);
+  color: var(--chip-color);
   font-size: 0.82rem;
   padding: 0.15rem 0.8rem;
   margin-right: 0.5rem;
+  transition: background 0.2s, color 0.2s;
 }
-
 .ocean-badge {
   display: inline-block;
   border-radius: var(--radius-md);
@@ -110,6 +154,7 @@
   box-shadow: var(--shadow);
   padding: 1rem;
   position: relative;
+  transition: background 0.4s, color 0.2s, box-shadow 0.18s;
 }
 
 .ocean-card-media {
@@ -121,41 +166,54 @@
   background: #e5e7eb;
 }
 
+[data-theme="dark"] .ocean-card-media {
+  background: #21252e;
+}
+
 /* Skeleton Loader */
 .ocean-skeleton {
-  background: linear-gradient(90deg, #e6e6e6 25%, #f0f0f0 50%, #e6e6e6 75%);
+  background: linear-gradient(90deg, #d3d6df 25%, #f0f0f0 50%, #d3d6df 75%);
   background-size: 200% 100%;
   animation: ocean-skeleton-loading 1s linear infinite;
 }
+[data-theme="dark"] .ocean-skeleton {
+  background: linear-gradient(90deg, #222a37 25%, #2d3442 50%, #222a37 75%);
+}
 
+/* Loader */
 @keyframes ocean-skeleton-loading {
   to { background-position: -200% 0; }
 }
 
 /* Layout structure */
-html, body {
-  background: var(--background);
-  color: var(--text);
-}
-
-/* App container responsiveness */
 .ocean-main-container {
   max-width: 1232px;
   margin: 0 auto;
   padding: 1.2rem;
 }
+@media (max-width: 900px) {
+  .ocean-main-container {
+    padding: 0.65rem;
+  }
+}
+@media (max-width: 640px) {
+  .ocean-card-media {
+    height: 150px;
+  }
+}
 
-/* Focus ring accessibility */
+/* App container responsiveness */
 *:focus-visible, .ocean-focus-visible {
   outline: 2px solid var(--primary) !important;
   outline-offset: 2px;
 }
-
 .ocean-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--primary) #e5e7eb;
 }
-
+[data-theme="dark"] .ocean-scrollbar {
+  scrollbar-color: var(--primary) #232b39;
+}
 /* Hide scrollbars for drawers (when needed) */
 .ocean-hide-scroll {
   scrollbar-width: none;
@@ -164,16 +222,4 @@ html, body {
 .ocean-hide-scroll::-webkit-scrollbar {
   width: 0px;
   background: transparent;
-}
-
-@media (max-width: 900px) {
-  .ocean-main-container {
-    padding: 0.65rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .ocean-card-media {
-    height: 150px;
-  }
 }
