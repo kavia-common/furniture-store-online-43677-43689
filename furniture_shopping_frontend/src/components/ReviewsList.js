@@ -68,11 +68,11 @@ function ReviewsList({ reviews }) {
               position: "fixed",
               zIndex: 12010,
               top: 0, left: 0, right: 0, bottom: 0,
-              background: "rgba(14,19,27,0.91)",
+              background: "rgba(14,19,27,0.96)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              transition: "background .2s",
+              transition: "background .18s"
             }}
             onClick={closeLightbox}
           >
@@ -86,12 +86,14 @@ function ReviewsList({ reviews }) {
                 src={img.url}
                 alt={img.name ? img.name : "Review image"}
                 style={{
-                  maxWidth: "90vw",
-                  maxHeight: "80vh",
-                  borderRadius: 14,
+                  maxWidth: "97vw",
+                  maxHeight: "92vh",
+                  borderRadius: 18,
                   objectFit: "contain",
-                  boxShadow: "0 8px 64px 10px #232338",
-                  border: "4px solid var(--surface,#fff)"
+                  background: "var(--surface,#fff)",
+                  boxShadow: "0 8px 64px 10px #232338e8",
+                  border: "6px solid var(--surface,#fff)",
+                  aspectRatio: "4 / 3"
                 }}
                 tabIndex={0}
                 aria-label="Large preview of review image"
@@ -108,8 +110,8 @@ function ReviewsList({ reviews }) {
                   color: "#fff",
                   border: 0,
                   borderRadius: "50%",
-                  width: 41, height: 41,
-                  fontSize: "1.55em",
+                  width: 46, height: 46,
+                  fontSize: "1.77em",
                   fontWeight: 900,
                   cursor: "pointer",
                   boxShadow: "0 4px 32px #0009"
@@ -120,7 +122,7 @@ function ReviewsList({ reviews }) {
                 <>
                   <button
                     style={{
-                      position: "absolute", left: -45, top: "50%",
+                      position: "absolute", left: -55, top: "50%",
                       background: "#fff", color: "var(--primary)",
                       fontWeight: 900, border: 0, borderRadius: 21, width: 35, height: 35, fontSize: "1.12em", cursor:"pointer"
                     }}
@@ -130,7 +132,7 @@ function ReviewsList({ reviews }) {
                   >&#8592;</button>
                   <button
                     style={{
-                      position: "absolute", right: -45, top: "50%",
+                      position: "absolute", right: -55, top: "50%",
                       background: "#fff", color: "var(--primary)",
                       fontWeight: 900, border: 0, borderRadius: 21, width: 35, height: 35, fontSize: "1.12em", cursor:"pointer"
                     }}
@@ -226,9 +228,9 @@ function ReviewsList({ reviews }) {
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit,minmax(80px,1fr))",
-                    gap: "0.45em",
-                    marginTop: "0.65em"
+                    gridTemplateColumns: "repeat(auto-fit,minmax(110px,1fr))",
+                    gap: "0.67em",
+                    marginTop: "0.7em"
                   }}
                 >
                   {r.images.map((img, imgIdx) => (
@@ -246,13 +248,16 @@ function ReviewsList({ reviews }) {
                           background: "none",
                           padding: 0,
                           margin: 0,
-                          borderRadius: 9,
+                          borderRadius: 11,
                           cursor: "pointer",
                           boxShadow: "0 2px 8px #7c3aed19",
                           display: "block",
                           aspectRatio: "1 / 1",
                           position: "relative",
-                          outline: "none"
+                          outline: "none",
+                          minWidth: 105,
+                          minHeight: 85,
+                          maxWidth: 130,
                         }}
                         aria-label={`Preview image ${imgIdx + 1} for ${r.name}`}
                         aria-haspopup="dialog"
@@ -263,11 +268,13 @@ function ReviewsList({ reviews }) {
                           alt={img.name ? img.name : `Review image ${imgIdx + 1}`}
                           style={{
                             width: "100%",
-                            height: 77,
+                            height: 100,
                             objectFit: "cover",
-                            borderRadius: 9,
+                            borderRadius: 11,
+                            background: "var(--surface)",
                             boxShadow: "0 1px 7px #23233817",
-                            outline: 0
+                            outline: 0,
+                            aspectRatio: "4/3"
                           }}
                           loading="lazy"
                         />

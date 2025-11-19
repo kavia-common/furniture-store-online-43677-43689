@@ -20,10 +20,25 @@ function ProductCard({ product }) {
     >
       <img
         src={product.image}
+        srcSet={
+          process.env.REACT_APP_API_BASE
+            ? `${product.image}?w=360 360w,${product.image}?w=600 600w,${product.image}?w=880 880w`
+            : `${product.image}`
+        }
+        sizes="(max-width: 600px) 92vw, (max-width: 1000px) 44vw, 340px"
         alt={product.name}
         className="ocean-card-media"
+        style={{
+          aspectRatio: "4/3",
+          objectFit: "cover",
+          width: "100%",
+          display: "block",
+          background: "var(--surface)",
+          borderRadius: "var(--radius-sm)",
+          transition: "box-shadow 0.19s",
+          minHeight: 0 // fallback if height auto
+        }}
         loading="lazy"
-        style={{ objectFit: 'cover'}}
       />
       <div style={{ flex:1, textAlign:'left', paddingBottom:'0.75em' }}>
         <div style={{ color: 'var(--secondary)', fontWeight:600, fontSize:'0.89em', marginBottom:'0.25em' }}>
