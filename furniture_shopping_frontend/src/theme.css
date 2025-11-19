@@ -1,0 +1,179 @@
+:root {
+  --primary: #2563EB;
+  --secondary: #F59E0B;
+  --success: #F59E0B;
+  --error: #EF4444;
+  --gradient-start: #2563eb1a;
+  --gradient-end: #f9fafb;
+  --background: #f9fafb;
+  --surface: #ffffff;
+  --text: #111827;
+  --shadow: 0 2px 8px 0 rgba(16,30,54,0.08);
+  --radius-lg: 1.2rem;
+  --radius-md: 0.75rem;
+  --radius-sm: 0.5rem;
+}
+
+/* Utility classes */
+.ocean-bg {
+  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+}
+
+.ocean-surface {
+  background: var(--surface);
+}
+
+.ocean-shadow {
+  box-shadow: var(--shadow);
+}
+
+.ocean-rounded {
+  border-radius: var(--radius-lg);
+}
+
+.ocean-rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.ocean-rounded-sm {
+  border-radius: var(--radius-sm);
+}
+
+.ocean-focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.ocean-transition {
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+/* Buttons */
+.ocean-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1.25rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.ocean-btn:focus-visible {
+  outline: var(--secondary) 2px solid;
+}
+
+.ocean-btn:hover {
+  background: #1553c3;
+}
+
+.ocean-btn.secondary {
+  background: var(--secondary);
+  color: #202427;
+}
+
+.ocean-btn.secondary:hover {
+  background: #cf8508;
+}
+
+/* Chips/Badges */
+.ocean-chip {
+  display: inline-block;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.82rem;
+  padding: 0.15rem 0.8rem;
+  margin-right: 0.5rem;
+}
+
+.ocean-badge {
+  display: inline-block;
+  border-radius: var(--radius-md);
+  background: var(--error);
+  color: #fff;
+  padding: 0.18em 0.7em;
+  font-size: 0.85em;
+  margin-left: 0.5em;
+  vertical-align: middle;
+}
+
+/* Card */
+.ocean-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  position: relative;
+}
+
+.ocean-card-media {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.6rem;
+  background: #e5e7eb;
+}
+
+/* Skeleton Loader */
+.ocean-skeleton {
+  background: linear-gradient(90deg, #e6e6e6 25%, #f0f0f0 50%, #e6e6e6 75%);
+  background-size: 200% 100%;
+  animation: ocean-skeleton-loading 1s linear infinite;
+}
+
+@keyframes ocean-skeleton-loading {
+  to { background-position: -200% 0; }
+}
+
+/* Layout structure */
+html, body {
+  background: var(--background);
+  color: var(--text);
+}
+
+/* App container responsiveness */
+.ocean-main-container {
+  max-width: 1232px;
+  margin: 0 auto;
+  padding: 1.2rem;
+}
+
+/* Focus ring accessibility */
+*:focus-visible, .ocean-focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px;
+}
+
+.ocean-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) #e5e7eb;
+}
+
+/* Hide scrollbars for drawers (when needed) */
+.ocean-hide-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ocean-hide-scroll::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+@media (max-width: 900px) {
+  .ocean-main-container {
+    padding: 0.65rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .ocean-card-media {
+    height: 150px;
+  }
+}

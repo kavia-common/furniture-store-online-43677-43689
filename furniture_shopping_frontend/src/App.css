@@ -102,3 +102,24 @@
     font-size: 12px;
   }
 }
+
+/* --- SearchBar styling for ocean theme --- */
+form[role="search"] input[type="search"]:focus {
+  border: 1.5px solid var(--primary);
+  box-shadow: 0 0 0 2px #2563eb30;
+}
+
+form[role="search"] input[type="search"]:disabled {
+  background: #f0f9ff;
+  color: #a7aeb8;
+  opacity: 1;
+}
+
+/* Improve product "not found" */
+.ocean-no-results {
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 1.19em;
+  padding: 2em 0;
+  text-align: center;
+}
